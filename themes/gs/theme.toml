@@ -1,0 +1,6 @@
+# Roughly forked from https://themes.gohugo.io/themes/gohugo-theme-ananke/ used
+# for reference.
+
+name = "blog.gabrielsimmer.com Theme"
+description = "Theme for blog.gabrielsimmer.com"
+homepage = "https://blog.gabrielsimmer.com"

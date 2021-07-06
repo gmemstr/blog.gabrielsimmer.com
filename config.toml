@@ -1,0 +1,5 @@
+baseURL = "https://blog.gabrielsimmer.com/"
+languageCode = "en-us"
+title = "Gabriel's Blog"
+theme = "gs"
+ignorefiles = [ "content/posts/exported/.*", "content/posts/drafts/.*" ]
