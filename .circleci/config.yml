@@ -18,8 +18,8 @@ jobs:
           command: |
             git init
             git remote add origin git@github.com:gmemstr/blog.gabrielsimmer.com
-            git checkout production
-            git pull origin production
+            git fetch
+            git branch production origin/production
           working_directory: public
       - run:
           command: git show -s --format=%s > public/latest_commit
