@@ -22,7 +22,9 @@ jobs:
             git branch production origin/production
           working_directory: public
       - run:
-          command: git show -s --format=%s > public/latest_commit
+          command: |
+            git show -s --format=%s > public/latest_commit
+            echo "Latest commit:\n$(cat public/latest_commit)"
       - run: 
           command: hugo -D
           name: Build Hugo site
@@ -45,7 +47,6 @@ jobs:
             git commit -m $(cat latest_commit)
             # git push origin production
           name: Push to production
-          working_directory: public
 
 workflows:
   build-and-push:
