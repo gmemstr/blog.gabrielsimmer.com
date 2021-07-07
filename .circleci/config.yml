@@ -10,7 +10,8 @@ jobs:
       - run: mkdir public
       - run:
           name: Setup git project branch
-          command: | 
+          command: |
+            apk add git 
             git init
             git remote add origin git@github.com:gmemstr/blog.gabrielsimmer.com
             git checkout production
