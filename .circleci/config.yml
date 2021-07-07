@@ -1,2 +1,55 @@
 # Todo
 version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: klakegg/hugo:latest
+    steps:
+      - checkout
+      - run: mkdir public
+      - run:
+          name: Setup git project branch
+          command: | 
+            git init
+            git remote add origin git@github.com:gmemstr/blog.gabrielsimmer.com
+            git checkout production
+            git pull origin production
+          working_directory: public
+      - run:
+          command: git show -s --format=%s > public/latest_commit
+      - run: 
+          command: hugo -D
+          name: Build Hugo site
+      - persist_to_workspace:
+          root: public
+          paths: ["."]
+  push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - add_ssh_keys:
+          fingerprints: ["a8:06:9c:01:24:1b:b6:59:a9:62:76:81:81:d9:9a:29"]
+      - run:
+          command: |
+            git add .
+            git commit -m $(cat latest_commit)
+            git push origin production
+          name: Push to production
+          working_directory: public
+
+workflows:
+  build-and-push:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: ["production"]
+      - push:
+          requires: ["build"]
+          filters:
+            branches:
+              only: ["trunk"]
+
