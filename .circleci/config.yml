@@ -35,6 +35,8 @@ jobs:
           fingerprints: ["a8:06:9c:01:24:1b:b6:59:a9:62:76:81:81:d9:9a:29"]
       - run:
           command: |
+            git config user.name "Gabriel Simmer"
+            git config user.email "gabriel@gitgalaxy.com"
             git add .
             git commit -m $(cat latest_commit)
             git push origin production
