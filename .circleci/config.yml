@@ -4,14 +4,13 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: klakegg/hugo:latest
+      - image: klakegg/hugo:ubuntu-ci
     steps:
       - checkout
       - run: mkdir public
       - run:
           name: Setup git project branch
           command: |
-            apk add git 
             git init
             git remote add origin git@github.com:gmemstr/blog.gabrielsimmer.com
             git checkout production
