@@ -1,6 +1,6 @@
 ---
 title: Hello, world! (Again)
-date: 2021-07-04
+date: 2021-07-06
 ---
 
 Welcome back to the blog! Sort of.
