@@ -1,2 +1,67 @@
 # Todo
 version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run: 
+          command: |
+            mkdir public
+            wget https://github.com/gohugoio/hugo/releases/download/v0.85.0/hugo_0.85.0_Linux-64bit.deb
+            sudo dpkg -i hugo_0.85.0_Linux-64bit.deb
+          name: Setup environment
+      - run:
+          name: Setup git project branch
+          command: |
+            git init
+            git remote add origin git@github.com:gmemstr/blog.gabrielsimmer.com
+            git fetch
+            git branch production origin/production
+            git checkout production
+          working_directory: public
+      - run:
+          command: |
+            git show -s --format=%s > public/latest_commit
+            echo "Latest commit:\n$(cat public/latest_commit)"
+      - run: 
+          command: hugo --minify
+          name: Build Hugo site
+      - persist_to_workspace:
+          root: public
+          paths: ["."]
+  push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - add_ssh_keys:
+          fingerprints: ["a8:06:9c:01:24:1b:b6:59:a9:62:76:81:81:d9:9a:29"]
+      - run:
+          command: |
+            git config user.name "Gabriel Simmer"
+            git config user.email "gabriel@gitgalaxy.com"
+            git add .
+            git commit -m "$(cat latest_commit)"
+
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+            git push origin production
+          name: Push to production
+
+workflows:
+  build-and-push:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: ["production"]
+      - push:
+          requires: ["build"]
+          filters:
+            branches:
+              only: ["trunk"]
+
