@@ -26,7 +26,7 @@ jobs:
             git show -s --format=%s > public/latest_commit
             echo "Latest commit:\n$(cat public/latest_commit)"
       - run: 
-          command: hugo -D
+          command: hugo --minify
           name: Build Hugo site
       - persist_to_workspace:
           root: public
