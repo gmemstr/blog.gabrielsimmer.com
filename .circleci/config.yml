@@ -46,7 +46,7 @@ jobs:
             git config user.email "gabriel@gitgalaxy.com"
             git add .
             git commit -m "$(cat latest_commit)"
-            # git push origin production
+            git push origin production
           name: Push to production
 
 workflows:
@@ -58,7 +58,7 @@ workflows:
               ignore: ["production"]
       - push:
           requires: ["build"]
-          # filters:
-          #   branches:
-          #     only: ["trunk"]
+          filters:
+            branches:
+              only: ["trunk"]
 
