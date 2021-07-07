@@ -44,7 +44,7 @@ jobs:
             git config user.name "Gabriel Simmer"
             git config user.email "gabriel@gitgalaxy.com"
             git add .
-            git commit -m $(cat latest_commit)
+            git commit -m "$(cat latest_commit)"
             # git push origin production
           name: Push to production
 
