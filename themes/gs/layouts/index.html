@@ -10,13 +10,29 @@
     <div class="eight columns">
       {{- .Content -}}
       {{ range .Paginator.Pages }}
-      <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-      <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <div class="post-summary">
+        <div class="post-header">
+          <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+          <span>{{ .Date.Format "January 2, 2006" }}</span>
+        </div>
+      <div>
         {{ .Summary  }}
       </div>
+    </div>
       {{ end }}
     <div class="pagination">
-      {{- template "_internal/pagination.html" . -}}
+      {{ $paginator := .Paginator }}
+      {{ if gt $paginator.TotalPages 1 }}
+      <ul>
+        {{ if $paginator.HasNext }}
+          <li><a href="{{ $paginator.Next.URL }}">Older</a></li>
+        {{ end }}
+
+        {{ if $paginator.HasPrev }}
+          <li><a href="{{ $paginator.Prev.URL }}">Newer</a></li>
+        {{ end }}
+      </ul>
+      {{ end }}
     </div>
     </div>
   </div>

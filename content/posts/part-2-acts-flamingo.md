@@ -1,5 +1,5 @@
 ---
-title: (Part 2) ATCS --- Flamingo {#part-2-atcs-flamingo .p-name}
+title: (Part 2) ATCS --- Flamingo
 date: 2016-12-08
 ---
 

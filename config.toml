@@ -3,3 +3,4 @@ languageCode = "en-us"
 title = "Gabriel's Blog"
 theme = "gs"
 ignorefiles = [ "content/posts/exported/.*", "content/posts/drafts/.*" ]
+paginate = 5

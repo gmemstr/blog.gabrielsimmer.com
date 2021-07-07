@@ -48,6 +48,8 @@ seconds with a 14 item list), but I'll refine a bit in the future.
 
 ![How the spreadsheet looks](https://cdn-images-1.medium.com/max/600/1*a6NU2Lv_H2gHrffRT2pfEw.png)
 
+[Gist source](https://gist.github.com/gmemstr/d0024ab38a9cd0aae3a8cce25202c9b0)
+
 > "If everyone demanded peace instead of another television set, then
 > there'd be peace." -- [**John
 > Lennon**](https://www.goodreads.com/author/show/19968.John_Lennon) **(Probably)**
