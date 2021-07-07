@@ -7,7 +7,12 @@ jobs:
       - image: klakegg/hugo:ubuntu-ci
     steps:
       - checkout
-      - run: mkdir public
+      - run: 
+          command: |
+            mkdir public
+            apt update
+            apt install git
+          name: Setup environment
       - run:
           name: Setup git project branch
           command: |
