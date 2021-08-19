@@ -1,6 +1,6 @@
 ---
 title: On Keyboards
-date: 2021-01-01
+date: 2021-08-19
 ---
 
 #### My current keyboard is a GMMK Pro
