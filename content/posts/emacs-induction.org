@@ -1,0 +1,58 @@
+#+title: Emacs Induction
+#+date: 2021-09-01
+
+*** Recently, I decided to pick up Emacs.
+
+/sidenote: this is my first post using orgmode. so apologies for any weirdness./
+    
+I've always been fascinated with the culture around text editors. Each one is formed
+of its own clique of dedicated users, with either a flourishing ecosystem or floundering
+community (see: Atom). You have the vim users, swearing by the keyboard shortcuts,
+the VSCode users, pledging allegiance +to the flag+ Microsoft and Node, the Sublime
+fanatics, with their focused and fast editor, and the emacs nerds, living and breathing
+(lisp). And all the other editors and their hardcore users (seriously, we could spend
+all day listing them). And the fantastic thing is, all of them (except Notepad) are
+perfectly valid options for development. Thanks to the advent of the Language Server
+Protocol, most text extensible editors can be turned into competent code editors (not
+neccesarily IDE replacements, but good enough for small or day to day use).
+
+Up until recently, I've been using Sublime. It's a focused experience with a very small
+development team and a newly revived ecosystem, and native applications for any platform
+I care to use. I've used VSCode, Atom, and Notepad++ previously, but never really delved
+much into the world of "text based" (for lack of better term?) editors, including vim
+and emacs. The most exposure was using nano for quick configuration edits on servers or
+vim for git commit messages. Emacs evaded me, and I had little interest in switching
+away from the editors I already understood. But as I grew as a developer and explored
+new topics, including Clojure and Lisps in general, I quickly realized that to go further
+I would need to dig deeper into more foreign concepts and stray from the C-like languages
+I was so comfortable with. The first few days at CircleCI, I was introduced to [[https://clojure.org/][Clojure]],
+and I quickly grew more comfortable with the language and concepts (although I am
+nowhere near experienced enough to write a more complete application), and I have that
+to thank for my real interest in lisps.
+
+Several failed attempts later, I managed to get a handle on how Guix works on a surface
+level. My motivation for this was trying to package Sublime Text, which, while I make
+significant progress, I hit some hard blockers that proved tough to defeat. This
+sparked me to invest time into emacs, the operating system with an okay text editor.
+For a while, leading up to this, I've subscribed and consumed [[https://www.youtube.com/c/systemcrafters][System Crafters]], an
+excellent resource for getting started with emacs configuration (among other related
+topics). It was part of my inspiration to pick up emacs and play around with it - I don't
+typically enjoy watching video based tutorials, especially for programming, but thanks
+to the livestreamed format presented it was much easier to consume. 
+
+So far, I'm enjoying it. Now that I have more of a handle on how lisps work, it's a much
+smoother experience, and I do encourage developers to exit their comfort zone of C-like
+languages and poke around a lisp. There's a learning curve, for sure, but the concepts
+can be applied to non lisp languages as well. The configuration for my emacs setup is
+(so far) relatively straightforward, and I haven't spent much time setting it up with
+language servers or specific language modes, but for writing it's pretty snappy (and
+pretty). [[https://orgmode.org][Orgmode]] is a very interesting experience coming from being a staunch Markdown
+defender, but it's not a huge adjustment and the experience with emacs is sublime. It's
+also usable outside of emacs, although I can't speak to the experience, and GitHub
+supports it natively (and Hugo, thank goodness). [[https://justin.abrah.ms/emacs/literate_programming.html][Literate programming]] also seems like
+a really neat idea of blog posts and documentation, and I might switch my repository
+READMEs over to it for things like configuration templates. These are still early days
+though - I've only been using emacs for a few days and am still working out where it
+fits in to my development workflow beyond markdown/orgmode documents. 
+
+/sidenote: emacs or Emacs?/
