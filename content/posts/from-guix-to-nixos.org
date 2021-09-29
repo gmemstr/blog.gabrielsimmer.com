@@ -1,0 +1,60 @@
+#+title: From Guix to NixOS
+#+date: 29/09/2021
+
+*it's a matter of compromise*
+
+I really, really like the idea of a declarative model for things - define a state
+you want an application to be in, and let the system figure out how to get there.
+It's what drew me to Terraform (my first real exposure to declarative systems)
+and what eventually lead me to paying particular attention to Guix. NixOS was on
+my radar, but having been inducted into the [[/posts/emacs-induction][land of lisps]] I didn't particularly
+like the configuration language.
+
+It was inevitable I would end up with a Guix install, but it didn't last long -
+the move was motivated by a recent kernel upgrade I had done on my up-until-then
+very stable Arch install. The hard lockups got irritating to the point I decided
+to hop distributions, and Guix was the natural choice - I had already been
+experimenting with it in a virtual machine, and had written a rather complete
+configuration file as well. But I quickly ran into a big roadblock:
+/graphics drivers/. I rather like playing video games on the old Steam, and
+having an nvidia graphics card means the graphics drivers included in the Linux
+kernel don't quite cut it. But don't panic! There's a community driven [[https://gitlab.com/nonguix/nonguix][nonguix]]
+repository that focuses on packaging nonfree applications, drivers and kernels
+for Guix systems (my install image [[https://github.com/SystemCrafters/guix-installer/][was based on it the nonfree kernel]]).
+Unfortunately, support for nvidia drivers is spotty - this isn't really the fault
+of the community, with nvidia being rather disliked in the Linux kernel and
+community ([[https://www.youtube.com/watch?v=_36yNWw_07g][case in point]]). No problem though. A few versions behind isn't that
+big of a deal, since I don't play many new triple-A games anyways. Alas, the
+troubles arose again when I ran into incompatibilities with GNOME and GDM. While
+is has been reported to be compatible with an alternative login manager and
+desktop environment, I was comfortable with GNOME (despite disliking the overall
+look and feel, it's a comfortable place to be and I'm rather tired of tiling
+window managers). Having at this point become incredibly frustrated with the
+edit-reboot-test loop, I decided to instead turn to NixOS, which benefitted from
+not adhering to free-software-only to a fault. While I do crave the ability to
+only use free software, at some point I have to make a comprimise to continue
+enjoying the hobbies and acitvities that I do.
+
+A fresh NixOS install USB in hand, I set about spinning up a new installation
+on my desktop. The initial install had a few missteps - while my memory is
+somewhat fuzzy on the cause, my first go lead to a constant boot into systemd
+emergency mode. Going back to square one seemed to resolve the issue, and I had
+a happily running NixOS install at the end of the day. So I guess I'm learning
+Nix! Which is really not the worst thing ever - given the package manager itself
+can run on more systems (including macOS, making it a likely candidate to replace
+=brew= for me), I can't think of any real downsides to having it in my toolbelt.
+It furthers my goal of having a declarative for systems I use, which is a slow
+but ambitious end game.
+
+My initial impressions of Nix's DSL versus Guix's Guile (scheme) is that of
+curiousity. Nix's language comes across as more of a configuration system akin
+to (and I hesitate to make this comparison, but I'm in the early stages of
+learning) YAML or TOML, while Guile is (as expected) a very flexible lisp. While
+I do still invest my time into learning and embracing lisps (especially in
+emacs), and I really want to return to Guix at some point, I feel the current
+comprimise I have to take will lead me to never doing so (unless I switched to
+an AMD GPU and optimized for nonfree operation). So my current path is to stick
+with NixOS and optimize and share my configurations (you can expect to see them
+on my [[https://github.com/gmemstr/dotfiles][dotfiles repository]] soon-ish).
+
+I hope to write more on this soon!
