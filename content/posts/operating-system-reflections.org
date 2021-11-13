@@ -1,0 +1,79 @@
+#+title: A Reflection on Operating Systems
+#+date: 2021-11-13
+
+*macOS. Windows. Linux. It's all bad.*
+
+Clickybaity line aside, it's worth digging into the "Big Three" when it comes to operating
+systems. Over the years I've used them in various forms and versions, on personal desktops,
+production servers, work laptops, and so on. I've seen both the good and the bad for most
+of the operating system choices discussed, but I will in no way claim to be an expert. Before
+going any further, it's worth doing a quick rundown of Linux distributions I've used.
+
+- Ubuntu (various versions over the years)
+- Arch Linux (A favourite of mine)
+- GNU Guix
+- NixOS
+- Various Ubuntu-based distributions
+
+Specific versions aside, I've been able to watch Linux distros evolve over the past ~9 years.
+Along the way I've used Windows 7/8/8.1/10/11 (Vista is in there somewhere, but my memory is
+fuzzy), and macOS/OSX versions.
+
+All these choices have various upsides and downsides. This particular post is motivated by
+a recent change in my life; after years(ish) of running Linux on my desktop, stubbornly
+refusing to install Windows, I finally did it. I switch to an operating system that makes
+me feel less in control of my desktop. An operating system with very strange bugs that
+should not exist ([[https://arstechnica.com/gadgets/2021/11/expired-windows-11-certificate-breaks-some-built-in-apps-and-tools/][like snipping tool breaking due to an expired certificate]]). An operating
+system that just does its own thing, and is still incredibly expensive.
+
+Gripes about Windows aside, the change I made was mostly for reasons related to gaming.
+Gaming on Linux has come a /long/ way, to the point it was almost second nature to be
+playing relatively recent AAA games on it. There was also a sense of trying to wrestle
+Linux - towards the end of my journey I was using NixOS, which is an excellent declarative
+operating system [[/posts/from-guix-to-nixos][that I've covered before]]. While the package repository it offers is very
+complete, there were a few instances where I found myself needing to reach for the unstable
+package repository, or debating whether to write my own Nix packages, or diving into long
+GitHub discussions about a specific issue. I found myself with little energy to actually
+persue these things, with my job as a Software Development Engineer sucking up what
+motivation/eagerness I had to deal with technical issues. How I ended up on NixOS is
+detailed on the aforelinked (that's not a word, but work with me on this) blog post,
+with did not help with my frustrations with Linux on the desktop. Eventually this
+built up into a crescendo of the Windows 11 install screen and self loathing.
+
+I'm not proud of this move, nor particularly happy, but at the very least WSL has come
+a long way from the initial versions, now supporting fancy things like GUI apps (I'm
+currently typing this in emacs running in WSL, which is still a bit weird to me).
+
+#+ATTR_HTML :title emacs on Windows in WSL :alt emacs gui running from WSL
+[[file:/images/emacs-on-windows.png]]
+
+Jetbrains editors also have okay support for WSL, so it's feasible to do what little
+personal development I do these days in a mostly complete Linux environment.
+
+macOS isn't something I feel neccesary to touch on here since it's a fairly personal post 
+about my journey, but for the sake of completion it's worth mentioning it's been my main 
+work OS and I do have my share of complaints about it. Primarily, window management is 
+very cumbersome without a third party application. While I haven't run a tiling window 
+manager in a while, I do like having the option of arranging my windows in that way. 
+I've opted for [[https://rectangleapp.com/][Rectangle]], which works well enough that I an satisfied and not wrestling 
+the urge to buy an application.
+
+It may seem that the summary is that macOS has the fewest problems, but it does still suffer
+from being the most locked down of the three choices (I /know/ Linux is a kernel, not an
+operating system itself, but most Linux based operating systems are pretty similar and covering
+them under "Linux" is just easier). I'm not neccesarily worried that Apple is going to kill
+the ability to install third party applications on their desktop and laptop platforms, since
+those are a mainstay of those platforms, but every so often I do wonder what that could look like.
+Windows is an "okay" middleground of "flexible enough to do everything" and "closed enough that
+I don't have to spend too much time DIYing solutions". When you run into problems on Windows, you'll
+have to wrestle for control to maybe fix it, but it may be possible. On macOS, good luck - you're
+at the mercy of Apple's priorities and a reinstall may be in your future. On Linux? It's a 50/50
+chance of that issue being totally unique to your hardware and/or software combination - good luck
+(but at least you have the opportunity of fixing it yourself and contributing to the community).
+
+Overall I do want to return to Linux. But given my recent frustrations with it, I'm going to hold
+off until I'm either in a position or mindset to contribute properly. Linux has a long way to go
+on desktop, but I desperately want it to succeed. The sooner we stop relying on closed platforms
+the better (we just need to sort out the UI/UX crisis for FOSS). For the time being, I'm going
+to explore Windows 11 and what it offers for developers, and keep trucking along with macOS as
+a work environment as long as my employers offer it. 
