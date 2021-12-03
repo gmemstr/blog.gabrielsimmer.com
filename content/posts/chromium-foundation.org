@@ -1,0 +1,64 @@
+#+title: Chromium Foundation
+#+date: 2021-12-03
+
+*** We need to divorce Chromium from Google
+
+The world of browsers is pretty bleak. We essentially have one viable player, Chromium,
+flanked by the smaller players of Firefox, spiraling in a slow painful self destruction,
+and Safari, a browser well optimized for Apple products.
+
+/note: We're specifically discussing browsers, but you can roughly equate the arguments I make later with the browser's respective engines./
+
+The current state of browsers is a difficult one. Chromium has the backing of notable
+megacorps and is under the stewardship of Google, which come with a number of perks
+(great featureset, performance, talented minds working on a singular project, etc)
+and a number of downsides as well (Google has a vested interested in advertisements, for example).
+Firefox is off in the corner with a declining marketshare as it alienates its users
+in a flailing attempt to gain users from the Chromium market, including dumping XUL addons
+in favour of WebExtensions, some rather uneccesary UI refreshes (subjective, I suppose),
+and various other unsavoury moves that leave a bad taste in everyone's mouth. And Safari
+is in the other corner, resisting the web-first movement as applications move to web technologies
+and APIs in the name of +control+ privacy and effeciency. While I don't think Safari neccesarily
+holds back the web, I think it could make a more concerted effort to steer it.
+
+With all that said, it's easy to come to the conclusion that the web has a monoculture browser
+problem; over time, Chromium will emerge the obvious victor. And that's not great, but not because
+there would be only one browser engine.
+
+The web in 2021 is a complex place - due to a number of factors it's no longer simple documents located on
+webservers, but we now have what are ostensibly desktop applications loaded in a nested operating system. For better or worse, 
+this is where we've ended up, and that brings a /lot/ of hard problems to solve for a new browser. This is 
+why I believe there really hasn't been any new mainstream (key word!) browser engines - the web is simply
+too complex. The browser pushing this "forward" (somewhat subjective) is Chromium, but Chromium is controlled 
+by Google. While there are individuals and other corporations contributing code, Google still controls Chromium, and
+this makes a fair few people uneasy given Google's primary revenue source - ads, and in turn tracking. Logically,
+we want a more diverse set of browsers to choose from, free of Google's influence! Forget V8/Blink, we need
+independant engines! Full backing for Gecko and WebKit! Well, yes, but actually, no. We need to throw
+effort behind one engine free of Google's clutches, but it should be Chromium/V8/Blink.
+
+Hear me out (credit to @Slackwise for planting the seed of this in my head) - we should really opt to tear the most successful
+engine from Google's clutches and spin it off into its own entity. One with a nonprofit structure similar
+to how Linux manages itself (a good example of a large scale effort in a similar vein). The web is simply
+too complex at this point for new engines to thrive (see: Servo), and the other two options, Gecko from Mozilla/Firefox
+and WebKit from Safari/Apple, are having a really hard time evolving and playing catch up. With a foundation dedicated to the
+engine, and a licensing or sponsorship model built out, I genuinely believe that it would be better
+in the long run for the health and trust of the internet. We can still have Chromium derivatives, with
+their unique takes or spins, so it would not reduce the choice available (besides, people choose based on features, not engine). 
+Concentrating effort into a single browser engine rather than fragmenting the effort across a handful might allow
+for some really great changes to the core of the engine, whether it be performance, better APIs, more privacy 
+respecting approaches, and so on. It also finally eliminates the problem of cross browser incompatibilities.
+
+Would it stagnate? Maybe. It's entirely possible this is a terrible idea that would stiffle innovation. But
+given the success and evolution of other projects with a matching scale (Linux), and the constant demands
+for new "things" for the web, I feel confident that we could maintain a healthy internet with a single engine.
+And remember, it's okay for something to be "done". Constantly shipping new features isn't neccesarily a plus -
+while we see new features shipping as a sign of activity and life, it's perfectly fine for us to take a step back
+and work on bugs and speed improvements. And if something isn't satisfactory, I'm pretty confident that the
+project could be properly forked with improvements or changes made later upstreamed, in the spirit of open
+source and collaboration.
+
+There are calls for breaking up the large technology companies, but I don't really want to delve much
+into that here, or even consider this a call to action. Instead, I want this to serve as mild musings and
+hopefully get the seed of an idea out there, an idea discussed a few times in a private Discord guild. I don't
+expect this to ever become a reality without some strongarming from some government body, but I hold out some
+hope.
