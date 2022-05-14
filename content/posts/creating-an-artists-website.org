@@ -1,0 +1,86 @@
+#+title: Creating an Artist's Website
+#+date: 2022-05-14
+
+*** So my girlfriend is doing comissions...
+
+If you're coming to this post expecting some magical journey into the design
+and implementation of some fancy abstract website, I'm sorry to disappoint -
+this will instead be a relatively technical post about building out a /very/
+simple web frontend for both displaying comission information, building out an API
+(or more specifically, a headless content management system) for managing a few
+specific bits of content on said site (including images and text. Yay!), and the
+trials and tribulations of deploying said API, which includes a rewrite from
+TypeScript to Go.
+
+A little more background, to clarify who the artist in question is and their use case.
+My girlfriend has recently been taking on some art comissions, specifically around
+texturing avatars for VRChat. To make life easier, I decided to create a website
+for her that she could direct potential clients to, allowing them to have a look at
+the work she's completed, pricing estimates, and contact information. It began life as
+a simply gallery of photos, but didn't quite fit the above goals, and thus a plan was
+born (after consultation with the client) - custom made information sheets for each
+character, paired with a little blurb about what was done to reach the end product.
+The goal of having it be editable through an interface rather than manually editing
+HTML was forefront in my mind, so early into this design I opted to store the
+information as a static object in the JavaScript, intending to swap it out later.
+Frontend isn't really my speciality, so we'll say that it was relatively
+straightforward to put together and move on to the exciting piece - the API.
+
+My initial reaction was to leverage CloudFlare Page's /functions/ feature, which
+allows the creation of "serverless" functions alongside the static website (they
+also offer dedicated "Workers", but these appear to be intended as standalone
+endpoints rather than being developed in tandem with the site). Storing the comission
+sheets and the associated data was easy with the K/V store offered to the functions,
+but I began to encounter issues as soon as files got involved. While the runtime the
+functions are contained in /seems/ complete, it's a bit deceptive - in this instance,
+I found that the =File= / =Blob= API simply didn't exist, which put a big block in
+front of my plan to more or less proxy the image over to the GitHub repository,
+allowing me to store the images for free and very easily link and load them.
+Unfortunately, GitHub's API requires the contents of the files to be base64 encoded,
+and the limitations of the function's runtime environment made this difficult. I did
+manage to get the files to upload, but it would transform into a text file rather
+than the PNG it should be.
+
+After wrestling with this problem for a day, attempting various changes, I decided
+to throw the whole function idea into the bin and look at a traditional long-running
+server process, and ditched the idea of storing files in GitHub as it would only lead
+to frustrations when trying to do development and push changes, opting instead for
+Backblaze's B2 offering (mostly because I'd used it before and the pricing was
+reasonable, paired with the free bandwidth as it goes through CloudFlare). Not wanting
+to pass up and opportunity to pick up at least one new technology, I opted to leverage
+[[https://fly.io][Fly.io]]'s free plan. My initial impression of Fly.io was limited, having only read
+a handful of their blog posts, but upon further inspection (and I'm still standing
+by this after using the product for a while) it felt more like an evolved, but less
+mature, Heroku, offering a very similar fashion of deployment but with some added
+niceties like persistant volumes and free custom domains. 
+
+The first prototype leveraged SQLite with a persistant volume, since I didn't expect to
+need anythinig more complex - a flat file structure would have been fine, but where's the
+fun in that? And this actually worked fine, but I quickly found out that during deploys,
+the API would be unavailable as it updated to the latest version, and I figured the best
+way to resolve this would be to scale up to 2 instances of the app, so there would always
+be one instance available as the update rolled out. Ah! The keen eyed reader may say.
+"How will you replicate the SQLite database?" This... was a problem I had not considered,
+and thus went looking for answers to avoid spinning up a hosted database. With Fly.io
+having just aquired a company that builds a product specifically for this purpose, I
+figure this feature may be coming in the future, but after a little digging I decided to
+opt for a PostgreSQL database running on Fly.io. Blissfully easy to set up, with two
+commands required to create the database then create a connection string for the app
+itself, injected as an environment variable. After some manual migration (there were
+only a few records to migrate, so better sooner than later) and a deployment to swap over
+to the postgres datbase in the Go app, we were off to the races! Deployments now don't
+take the API offline, and I can scale up as I need without worrying about replicating the
+SQLite datbase. Success!
+
+/sidenote: this codebase is unlike to be open sourced anytime soon because it's... real messy. but keep an eye on my [[https://tech.lgbt/@arch][Mastodon]]/
+
+I know I've glossed over the file storage with Backblaze B2 a bit, but it's not really
+anything to note as exciting. The setup with CloudFlare was largely a [[https://www.backblaze.com/blog/free-image-hosting-with-cloudflare-transform-rules-and-backblaze-b2/][standard affair]] with
+some DNS entries and URL rules, and leveraging the S3 API and Go libraries made it a
+breeze to setup in the API itself. It's "fast enough", with caching, and the peering
+agreements between CloudFlare and Backblaze mean I only pay for the storage, which is much
+less than it would cost to use some other S3-compatible provider (say, AWS itself).
+
+My current task is getting the admin panel up to snuff, but it's very functional at the
+moment and easy enough for my girlfriend to use to update the content of the site, so
+at this point I'm satisfied with the [[https://artbybecki.com][current result]]. I now await further instructions.
