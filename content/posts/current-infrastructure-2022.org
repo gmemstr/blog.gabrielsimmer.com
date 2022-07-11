@@ -1,0 +1,87 @@
+#+title: Current Infrastructure (2022)
+#+date: 2022-07-12
+
+My personal infrastructure has evolved quite significantly over the years, from
+a single Raspberry Pi 1, to a Raspberry Pi 2 and ThinkCenter mini PC, to my
+current setup consisting of two Raspberry Pis, a few cloud servers, and a NAS that
+is currently being put together.
+
+At the heart of my infrastructure is my [[https://tailscale.com/kb/1136/tailnet/][tailnet]]. All machines, server, desktop, mobile, whatever,
+get added to the network, mostly for ease of access. One of my Pis at home serves as an exit
+node, exposing my home's subnet (sometimes called dot-fifty because of the default subnet the
+router creating) so I can access the few devices that I can't install Tailscale on. The
+simplicity of adding new devices to the network has proved very useful, and has encouraged me to
+adopt this everything-on-one-network approach.
+
+The servers on the network run a few key pieces of infrastructure. At home, the same Pi that
+serves as the Tailscale exit node also runs [[https://k3s.io/][k3s]] to coordinate the hosting of my Vaultwarden,
+container registry, and [[github.com/gmemstr/hue-webapp][hue webapp]] applications. This same Pi also serves Pihole, which has yet
+to be moved into k3s (but it will be soon). While k3s is a fairly optimised distribution of
+Kubernetes, it does beg the question "why deploy it? why not just run docker, or docker compose,
+or whatever else?". The simple answer is "I wanted to". The other simple answer is that it is
+an excellent learning exercise. I deal with Kubernetes on a fairly regular basis both at my
+day job and at [[https://furality.org][Furality]] (I'll be writing a dedicated post delving into the tech powering that),
+so having one or two personal deployments doesn't hurt for experimentation and learning. Plus,
+it's actually simplified my workflow for deploying applications to self host, and forced me to
+setup proper CI/CD workflows to push things to my personal container registry. This isn't
+anything special, just [[https://docs.docker.com/registry/deploying/][Docker's own registry server]] which I can push whatever images I want and
+pull them to whatever machine I need, provided said machine is connected to the tailnet.
+Thankfully Tailscale is trivial to use in CI/CD pipelines, so I don't ever have to expose
+this registry to the wider internet.
+
+Also at home I have my media library, which runs off a Raspberry Pi 4b connected to a 4TB external
+hard drive. This is the first thing that will be moved to the NAS being built, as it can struggle
+with some media workloads. It hosts an instance of [[https://jellyfin.org/][Jellyfin]] for watching things back, but I tend
+to use the exposed network share instead, since the Pi can sometimes struggle to encode video
+to serve through the browser. Using it as a "dumb" network share is mostly fine, but you do
+lose some of the nice features that come with a more full featured client, like resuming playback
+across devices or a nicer interface for picking what to watch. There's really nothing much more
+to say about this Pi. When the NAS is built, the work it does will be moved to that, and the k3s
+configuration currently running on my Pi 3b will move to it. At that point it's likely I'll
+actually cluster the two together, depending whether I find another workload for it.
+
+Over in the datacenter world, I have a few things running that are slightly less critical. For
+starters, I rent a 1TB storage box from [[https://www.hetzner.com][Hetzner]] for backing things up off-site. Most of it is just
+junk, and I really should get around to sorting it out, but there's a lot of files and directories
+and it's easier to just lug it around (I say that, it might actually be easier to just remove
+most of it since I rarely access the bulk of it). This is also where backups of my Minecraft server
+are sent to on a daily basis. This Minecraft server runs on [[https://www.oracle.com/uk/cloud/free/][Oracle Cloud's free tier]], specifically
+on a 4-core 12GB ARM based server. It performs pretty well considering it's only really me and my
+girlfriend playing on the server, and while I may not be the biggest fan of Oracle, it doesn't
+cost me anything (I do keep checking to make sure though!). Also running on Oracle Cloud is an
+instance of [[https://github.com/louislam/uptime-kuma][Uptime Kuma]], which is a fairly simple monitoring tool that makes requests to whatever
+services I need to keep an eye on every minute or so. This runs on the tiny AMD-based server
+the free tier provides, and while I ran into a bit of trouble with the default request interval
+for each service (it's currently monitoring 12 different services), randomising the intervals
+a bit seems to have smoothed everything out.
+
+Among the services being monitored is a small project I'm working on that is currently hosted
+on a Hetzner VPS. This VPS is also running k3s, and serves up [[https://mc.gmem.ca][mc.gmem.ca]] while I work on the beta
+version. The setup powering it is fairly straightforward, with a Kubernetes deployment pulling
+images from my container registry, the container image itself being built and pushed with
+[[https://sourcehut.org/][sourcehut]]'s build service. Originally, I tried hosting this on the same server as the Minecraft
+server, but despite being able to build images for different architectures, it proved very slow
+and error prone, so I opted to instead grab a cheap VPS to host it for the time being. I don't
+forsee the need to scale it up anytime soon, but it will be easy enough to do.
+
+A fair number of services I deploy or write rely on SQLite as a datastore, since I don't see much
+point in deploying/maintaining a full database server like Postgres, so I've taken to playing
+around with [[https://litestream.io/][Litestream]], which was recently "aquired" by Fly.io. This replicates over to the
+aforementioned Hetzner storage box, and I might add a second target to the configuration for
+peace of mind.
+
+Speaking of Fly.io, I also leverage that! Mostly as an experiment, but I did have a valid
+use case for it as well. My girlfriend does comissions for VRChat avatars, and needed a place to
+showcase her work. I opted to build out a custom headless CMS and simple frontend (with Go and
+SvelteKit, respectively) to create [[https://artbybecki.com/][Art by Becki]]. I'm no frontend dev, but the design is simple
+enough and the "client" is happy with it. The frontend itself is hosted on CloudFlare Pages (most
+of my sites or services have their DNS managed through CloudFlare), and images are served from
+Backblaze B2. I covered all this in my previous post [[/posts/creating-an-artists-website/][Creating an Artist's Website]] so you
+can read more about the site there. My own website (and this blog) is hosted with GitHub Pages,
+so nothing to really write about on that front.
+
+And with that, I think that's everything I currently self host, and how. I'm continuing to refine
+the setup, and my current goals are to build the NAS I desperately need and find a proper solution
+for writing/maintaining a personal knowledgebase. Be sure to either follow me on Mastodon [[https://tech.lgbt/@arch][tech.lgbt/@arch]]
+or Twitter [[https://twitter.com/gmem_][twitter.com/gmem_]]. I'm sure I'll have a followup post when I finally get my NAS built
+and deployed, with whatever trials and tribulations I encounter along the way.
