@@ -6,7 +6,7 @@
 
 /Generated with the Midjourney bot "An internet connected house"/
 
-I'm not eager to automate my whole home. Leaving aside security concerns, it's also really, really expensive. However, there are some small quality-of-life things I've added over time or kept over the years that I've found very helpful. It's an evolving thing and there are a few "smart home" things I would never, ever touch (internet connected "smart" deadlocks anyone?), but here and there I've found some useful internet-of-things-things to add.
+I'm not overly-eager to automate my whole home. Leaving aside security concerns, it's also really, really expensive. However, there are some small quality-of-life things I've added over time or kept over the years that I've found very helpful. It's an evolving thing and there are a few "smart home" objects I would never, ever touch (internet connected "smart" deadlocks anyone?), but here and there I've found some useful internet-of-things-things to add.
 
 Lights and lightbulbs are maybe the biggest no-brainer thing you could automate around your home, at least in my eyes. Automate them to wake you up, turn off when you leave the house, turn on when it gets dark in the evening, when you're away, and so on. To that end for the last few years I've had a set of hue bulbs (an older version with their hub) installed in my bedroom, upstairs office, and bird room. Over the years the app has gotten a bit clunky and slow so I ended up [[https://github.com/gmemstr/hue-webapp][making my own webapp]] for toggling lights, but I don't have any plans to upgrade the kit anytime soon. We'll talk about how I control the lights, and home, further down.
 
