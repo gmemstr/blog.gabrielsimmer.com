@@ -1,0 +1,27 @@
+#+title: Slightly Intelligent Home
+#+date: 2023-03-06
+
+#+attr_html: :alt An internet connected house (Midjourney)
+[[/images/slightly-intelligent-home.png]]
+
+I'm not eager to automate my whole home. Leaving aside security concerns, it's also really, really expensive. However, there are some small quality-of-life things I've added over time or kept over the years that I've found very helpful. It's an evolving thing and there are a few "smart home" things I would never, ever touch (internet connected "smart" deadlocks anyone?), but here and there I've found some useful internet-of-things-things to add.
+
+Lights and lightbulbs are maybe the biggest no-brainer thing you could automate around your home, at least in my eyes. Automate them to wake you up, turn off when you leave the house, turn on when it gets dark in the evening, when you're away, and so on. To that end for the last few years I've had a set of hue bulbs (an older version with their hub) installed in my bedroom, upstairs office, and bird room. Over the years the app has gotten a bit clunky and slow so I ended up [[https://github.com/gmemstr/hue-webapp][making my own webapp]] for toggling lights, but I don't have any plans to upgrade the kit anytime soon. We'll talk about how I control the lights, and home, further down.
+
+#+attr_html: :alt Simple hue webapp :title Hue webapp
+[[/images/hue-webapp.png]]
+
+We have a camera pointed at our bird's cage to keep an eye on her. It's a fairly straightforward Neos SmartCam/Wyzecam V2/Xiaomi Xiaofang 1S/Whatever other branding it exists under, and has been flashed with the [[https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks/][Dafang Hacks custom firmware]] for a plain RTSP stream (among other more standard protocols being exposed). This means I can open it with any player (usually VLC) without any problems. It's not the most powerful camera, streaming only 720p at the moment (24FPS, 300kbps), but considering the simple use case of checking in on our bird when we're out of the house it serves its purpose well. Not exactly "smart" but it is still part of the system.
+
+The next thing we added were some semi-connected thermometers. By semi-connected I mean they communicate over bluetooth low energy (BLE), so don't have a direct connection to the internet. This is somewhat preferable since it forces more processing to be done offline/in home. Unfortunately this also means we're very tied to the mildly hideous mobile app. At the very least we can still check the display on the front for the values.
+
+Finally, at the end of the tour, we have a simple connected plug for our bird's UV lamp. We try to maintain a pretty regular schedule for her, so being able to automate the lamp is a huge plus as it's a really good indication of when it's daytime (we're in Britain, land of no sun. It's raining as I type this) and when it's time for bed.
+
+Controlling all of this, especially in a centalised manner, is a little tricky. The pieces didn't really click until I remembered [[https://homebridge.io/][Homebridge]] existed. This spurred my adoption of HomeKit and the Apple Home app, and the purchase of an Apple HomePod mini. For all intents and purposes, this works really well. The rather simple UI is very fitting for my minimal/progressive "smart" home approach, and with Homebridge I've managed to bring in the camera and bluetooth thermometers (Homebridge is running on my Raspberry Pi based k3s cluster, which is easy since the Raspberry Pis have bluetooth to pick up the signal!). Using the Home app also means a much nicer experience for my partner, without needing to fiddle with multiple apps or deal with my very /engineered/ web interfaces, and allows us both to feed into the automations (e.g don't turn off all the lights when one of us it still home).
+
+As a sort of hidden benefit of Homebridge, I've been able to bring the thermometer metrics into my Grafana Cloud instance (more on this in the future) as the values from the plugin are printed to the log and shipped off to Loki. From there I do some regex on the logs to extract values. It's as bad as one might expect - that is to say, not horrible, but sometimes inaccurate.
+
+#+ATTR_HTML: :alt Grafana dashboard for climate metrics :title Climate metrics in Grafana
+[[/images/grafana-climate.png]]
+
+From here the next step is to obtain some connected thermostatic valves for our radiators around the house. The radiator valves have ended up in slightly awkward or hard to reach places so being able to connect them up and adjust as needed (especially scheduling them for evening VR sessions) would be a huge plus. Beyond that, I'm unsure what else I would want to introduce in the home - most of the common bases are covered, especially when it comes to keeping an eye on things when we're out of the house. But who knows - keep up with me [[https://floofy.tech/@arch][on Mastodon]] and we'll see what happens next.
