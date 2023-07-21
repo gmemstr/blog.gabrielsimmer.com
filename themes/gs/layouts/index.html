@@ -2,39 +2,36 @@
 <div class="container">
   <div class="row">
     <div class="twelve columns">
-    <h1>{{ .Title | default .Site.Title }}</h1>
-    <nav><a href="/index.xml">rss</a></nav>
+      <h1>{{ .Title | default .Site.Title }}</h1>
+      <nav><a href="/index.xml">rss</a></nav>
     </div>
   </div>
 
   <div class="row">
-    <div class="eight columns">
+    <div class="article-list">
       {{- .Content -}}
       {{ range .Paginator.Pages }}
       <div class="post-summary">
         <div class="post-header">
-          <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-          <span>{{ .Date.Format "January 2, 2006" }}</span>
+          <p><span>{{ .Date.Format "Jan 2, 2006" }}</span> - <a href="{{ .Permalink }}">{{ .Title }}</a>
+		  </p>
         </div>
-      <div>
-        {{ .Summary  }}
       </div>
-    </div>
       {{ end }}
-    <div class="pagination">
-      {{ $paginator := .Paginator }}
-      {{ if gt $paginator.TotalPages 1 }}
-      <ul>
-        {{ if $paginator.HasNext }}
+	  <div class="pagination">
+		{{ $paginator := .Paginator }}
+		{{ if gt $paginator.TotalPages 1 }}
+		<ul>
+          {{ if $paginator.HasNext }}
           <li><a href="{{ $paginator.Next.URL }}">Older</a></li>
-        {{ end }}
+          {{ end }}
 
-        {{ if $paginator.HasPrev }}
+          {{ if $paginator.HasPrev }}
           <li><a href="{{ $paginator.Prev.URL }}">Newer</a></li>
-        {{ end }}
-      </ul>
-      {{ end }}
-    </div>
+          {{ end }}
+		</ul>
+		{{ end }}
+      </div>
     </div>
   </div>
 </div>

@@ -5,27 +5,13 @@
     <h1>{{ default .Site.Title }}</h1>
     </div>
   </div>
-
-  <div class="row">
-    <div class="eight columns article">
+    <article>
       <h2>{{- .Title -}}</h2>
-      {{ with .Params.author }}
-      <p>
-          By <strong>
-          {{ if reflect.IsSlice . }}
-              {{ delimit . ", " | markdownify }}
-          {{else}}
-              {{ . | markdownify }}
-          {{ end }}
-          </strong>
-      </p>
-      {{ end }}
       <time {{ printf `datetime="%s"` (.Date.Format "2006-01-02T15:04:05Z07:00") | safeHTMLAttr }}>
         {{- .Date.Format "January 2, 2006" -}}
       </time>
       {{- .Content -}}
 	  <div><a href="/index.xml">rss</a></div>
-	</div>
-  </div>
+	</article>
 {{ end }}
 
