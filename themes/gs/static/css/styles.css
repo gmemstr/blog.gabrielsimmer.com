@@ -40,6 +40,7 @@ iframe {
 article, .article-list {
   max-width: 72ch;
   margin: 0 auto;
+  padding: 1ch;
 }
 
 /* Base Styles
