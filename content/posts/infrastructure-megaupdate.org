@@ -1,0 +1,78 @@
+#+title: Infrastructure Megaupdate
+#+date: 2023-07-21
+
+Over the past however long it's been since my last infrastructure blog post, I've been doing a /ton/ of work across various organisations and my own personal setup to get things up to a more acceptable standard. Rather than do small posts for each infrastructure overhaul, I've decided to bundle it all into one, to hopefully demonstrate how each experience feeds into the other and vice versa. For ease of reading, I'll break each infrastructure into its own section and let you jump between them at your leisure.
+
++ [[Personal Infrastructure]]
++ [[Furality]]
++ [[Floofy.tech & Mastodon]]
+
+/A quick side note:/ My day job and general interests greatly influence the path and deicisions I make when setting up infrastructure. What works for me might not work for you, and this is by no means a guide for setting things up. Keep that in mind when I mention the 4th Kubernetes cluster I maintain.
+
+** Personal Infrastructure
+
+[[/posts/current-infrastructure-2022/][See here for my previous personal infrastructure post]]
+
+Since my last post there have been some pretty notable changes. Notably, I've drastically reduced my usage of cloud based compute resources! This is a blessing and a curse in a lot of ways, but I'm still using my tailnet to connect to everything regardless of my physical location and I don't need to expose anything to the internet (except one thing, but we'll get to that).
+
+First, I did end up putting both my Raspberry Pis into a k3s cluster. I wouldn't neccessarily call this a mistake, but the amount I've tried to cram onto the Pis has lead me to hitting a pretty hard wall in terms of their compute resources. The cluster is frequently reporting >70% memory usage, and restarting certain deployments causes the entire thing to effectively be unreachable until the process completes. Part of this may be due in part to the cruft that has accumulated on the Pis themselves, and while writing this blog I ended up moving them to NixOS - or trying to at least. My Pi 3B+ no longer wants to boot from the USB port so I'm down to a single Pi 4B. But this fresh start did improve general performance.
+
+The cluster itself is running a handful of very helpful applications, some of which will be familiar if you read my previous post. I have a private Docker image registry, my hue webapp, Pihole (which I've currently turned off and swapped to NextDNS because of ✨ issues ✨), Vaultwarden, Homebridge, FreshRSS, the Webdev Support Bot, Dref, and Ntfy. I'm also hosting a CouchDB instance for my partner's website, which uses a Cloudflare Tunnel behind an AWS Cloudfront distribution, but that's quite possibly going to go away at some point due to performance concerns.
+
+While writing this, I also deployed a sync server for [[https://github.com/ellie/atuin][atuin]] using the [[https://github.com/conradludgate/atuin-server-sqlite/][atuin-server-sqlite]] repository (which I ended up contributing to! Yay open source!) and have been experimenting with using atuin for my fish shell history.
+
+Speaking of AWS! I'm starting to use it more and more, where it makes sense, and being very cautious of billing (as in, I check the billing page for several days after I make any change and have a £10 alert just in case. I'm mainly using S3 for backups, moving off a Hetzner Storage Box (which isn't /bad/ but did suffer reliability issues). Everything is uploaded to Glacier Instant Retrieval, and later transitioned to the other arhival tiers. It's very much a "disaster recovery" repository, if say my NAS completely dies.
+
+The next big component of my infrastructure is the aforementioned NAS. In my previous post, I hadn't yet assembled it, but I now have a NixOS based server running happily with a Ryzen 3700X, GTX1070, 32GB of memory and 4x4TB hard drives in a raidz1-0 configuration, giving me ~14.5TiB of storage and a single drive failure allowance. It primarily acts as a Plex server with a decent amount of media, and /use to/ run TrueNAS Scale before I got sick of the appliance approach TrueNAS took. It also runs an instance of [[https://n8n.io/][n8n]] for simple automations, using Tailscale Funnel to allow incoming webhooks. n8n is an interesting tool - I haven't used any low/no code tools since I put together a [[https://www.youtube.com/watch?v=fv8W9LWZU0A][proof-of-concept for a visual CircleCI configuration editor]], and I'm still exploring what exactly I can use it for. It's certainly a neat tool for quick prototyping, and I appreciate the escape hatch it offers in the form of directly writing JavaScript, but it's a little awkward coming from the habit of writing small Python/bash scripts for automations.
+
+During the authoring of this post, I also ended up setting up an instance of [[https://forgejo.org/][Forgejo]]! I've mirrored several of my GitHub repositories and some of my sourcehut repositories over to it, and plan to mirror them back over time, with the primary development being done in the Forgejo instance. To go along with that, I have a Gitea Action Runner on both the NAS itself and a free Oracle Cloud Infrastructure for ARM builds. I'll do a followup when I have more time to use it properly, but so far it's going pretty well besides some minor stumbling over Tailscale Funnel's single domain setup, causing me to do some funky nginx =location= wrangling.
+
+I've deliberately avoided setting up k3s on the NAS, either as a self contained setup or a node to pair with the Pi, to see how far I can get with using Nix. Don't get me wrong, there was a definite urge in the beginning, but the temptation has waned as time has gone on. If I really needed to, I would probably setup a virtual machine within the NAS and add that as a worker node.
+
+Because a lot of my servers (and desktop!) run NixOS, you can check out my exact configurations [[https://git.sr.ht/~gmem/infra/tree/trunk/item/krops][on sourcehut]] - I deploy using [[https://github.com/krebs/krops][krops]], but the configurations themselves aren't krops specific. My machine naming scheme is mostly a case of me picking a random city when setting up the hardware. Seattle is my Pi 4B, Vancouver is the NAS, Kelowna is the Pi 3B+ (RIP), and London is my desktop.
+
+#+attr_html: :alt Nas while building it :title NAS while building it
+[[/images/nas-build.png]]
+
+
+#+attr_html: :alt Another shot of the NAS :title Another shot of the NAS
+[[/images/nas-complete.png]]
+
+
+#+attr_html: :alt A collection of Rasbperry Pis in a case :title A collection of Rasbperry Pis in a case
+[[/images/pis-nas.png]]
+
+
+*** An aside: Nix and NixOS
+
+I've been running Nix and NixOS for a while. It's my package manager of choice for macOS, and my primary desktop OS for however long this install has been running (apparently this install has been around since October 27, 2022). I've grown really fond of it and am sort of /glad/ I bounced off of Guix so hard. Don't get me wrong - I'm far from being an expert on it, and Flakes still confuddle me a bit outside of basics for building projects and isolating dependencies. But it's proven a wonderful way for me to configure my environments and well worth the time it's taking for me to learn it. I've even made a contribution to nixpkgs (technically two, but the second was fixing mistakes from my first)!
+
+I still haven't properly setup storing my desktop's own system configuration in git, and my dotfiles repo is, as is typical, a mess, so I'm not taking full advantage of declarative configuration files for the OS and user directories (home-manager). It would also be really cool to have my system config change when I push a change to a git repo rather than manually building, but those are some big todo items that I'll have to tackle sooner than later.
+
+** Furality Infrastructure
+
+[[/posts/furality-infrastructure/][You can read my previous post about Furality infrastructure here]]
+
+The panel we presented during our last event, Furality Sylva, is up on [[https://www.youtube.com/watch?v=hX78oaX9w48][YouTube]], and you can find our slide deck [[https://gmem.ca/slides/Furality_DevOps_SYLVA.pdf][here]]. The short version is that we ended up rebuilding our Kubernetes cluster and completely ditching Terraform for managing the contents, opting instead for ArgoCD. This /drastically/ improved the speed at which things can be deployed and entirely removed the infrastructure team as a bottleneck for getting changes deployed. There's also been work happening to stand up a custom MySQL database cluster for our specific needs, and a big push to modernise how we currently deploy and maintain things /outside/ of our Kubernetes cluster. Generally though, it's been a lot of maintenence work, and post-Sylva I've felt incredibly burned out from Furality. There are a multitude of reasons for this that I won't get into here, but I'm hopeful that given a bit more time my vigor will return. In the meantime, I'm trying my best to train up the other wonderful people on the team so I can have time to recover.
+
+** Floofy.tech & Mastodon
+
+I haven't done a previous post for this!
+
+Since Elon Musk was in talks to buy Twitter, and eventually did, I started to immerse myself in Mastodon and the wider "fediverse". A learning experience for sure, but I was curious and felt (rightly so) there was going to be some big waves in that same direction and I wanted to get a foot in the door. It wasn't long before my good friends Kakious and Ekkoklang set up their own instance of Mastodon on [[https://floofy.tech][floofy.tech]], and I moved my account over. Of course being into infrastructure, I started to poke around and eventually convinced them to let me in as a systems admin - this didn't really involve much until we did a big migration from a handful of virtual servers to a single dedicated hardware box. That's when I really got to have fun - with Kakious handling the networking side and setting up vSphere and me handling the Kubernetes (k3s) cluster, we got a fairly solid setup running pretty quickly, and at a fairly decent price as well - our setup costs ~$60/month to run at the moment.
+
+The setup is fairly scalable and, if I say so, very well configured. We're running everything on a dedicated server from OVH with a Ryzen 5 5600X, 64GB of memory, and 1TB of storage, which is split up between 14 virtual machines. For the Kubernetes cluster we have three k3s control nodes (2CPU, 4GB of memory max) with etcd setup and five worker nodes (kobalds, 2CPU, 8GB of memory max). Within we're running Mastodon and the required components like Sidekiq and streaming, Grafana and Prometheus for gathering metrics, Vault for secrets management, Redis for Mastodon, and a few other supporting services, including Longhorn to distribute the storage responsibilities across the nodes and ArgoCD for keeping state in git. Of all the components, Longhorn has been the most troublesome, but some of that is due to misunderstanding of the configuration, rogue firewall rules and SELinux, and filling up disks (oops).
+
+Outside the Kubernetes cluster, we're also running Postgres, Postal for email, FreeIPA for identity management, and ElasticSearch on the same hardware. All these machines are snapshotted and backed up off-site, although some more work is being done to consolidate the backup strategies and implement specific strategies for specific services.
+
+All these virtual machines are running AlmaLinux, despite my petitioning to use Arch Linux. I'm still largely unfamiliar with the Red Hat-and-variants family of distributions, but this at least gives me a way of learning something that isn't based on Debian, Arch or NixOS. SELinux continues to be a bit of a mystery to me.
+
+A lot of the motivation for /how/ we built out our infrastructure relates directly to our day jobs. Kakious deals a lot with enterprise platforms and networking, while I (apparently) have a decent understanding of the Kubernetes and "cloud native" side of things. Floofy.tech acts more or less as a sandbox for us to play with, but with more rules because it is an actual production system with a suprising number of people using it as their Mastodon/fediverse instance of choice.
+
+Being an admin of a fediverse instance, especially using Mastodon, has been an interesting experience. For the most part, it's been problem free! Which is great because it makes the day to day fun. One small roadbump includes the recent security releases for Mastodon. We run a fork, [[https://glitch-soc.github.io/docs/][glitch-soc]], which is based on Mastodon's =main= branch rather than stable tagged releases. This is /usually/ fine, until a breakng change in the =main= branch makes its way into a glitch-soc release. In our case, this came in the form of the removal of statsd support (statsd providing a great number of metrics of how the Mastodon components are performing). We ended up forking off glitch-soc to re-add the removed component, so we're technically using a custom fork of Mastodon. Open source is a wondeful thing. This has the added advantage of letting us have greater control over the changes that make their way to our production deployment, and we can build the Docker images locally, skipping the ~4 hour build times glitch-soc has (at some point I will be getting some automated builds setup on our own hardware in some form or another).
+
+** What next?
+
+I think at this point, I'm pretty happy with my personal infrastructure setup. There's work to be done at Furality, but I have some wonderful furs on the infrastructure team working on that. My next move is going to be overengineering my personal website and blog for fun, which I've already started [[https://vancouver.scorpion-ghost.ts.net/git/arch/gabrielsimmer.com][on my private Forgejo instance]]. Deployed to fly.io, it won't involve any major changes to my infrastructure. I'll keep maintaining what infrastructure I have but I don't envision any major changes unless I build a new compute home server.
+
+If you have any questions, hit me up [[https://floofy.tech/@arch][on the fediverse]]!
