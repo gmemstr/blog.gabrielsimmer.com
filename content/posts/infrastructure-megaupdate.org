@@ -3,9 +3,9 @@
 
 Over the past however long it's been since my last infrastructure blog post, I've been doing a /ton/ of work across various organisations and my own personal setup to get things up to a more acceptable standard. Rather than do small posts for each infrastructure overhaul, I've decided to bundle it all into one, to hopefully demonstrate how each experience feeds into the other and vice versa. For ease of reading, I'll break each infrastructure into its own section and let you jump between them at your leisure.
 
-+ [[Personal Infrastructure]]
-+ [[Furality]]
-+ [[Floofy.tech & Mastodon]]
++ [[*Personal Infrastructure][Personal Infrastructure]]
++ [[*Furality Infrastructure][Furality Infrastructure]]
++ [[*Floofy.tech & Mastodon][Floofy.tech & Mastodon]]
 
 /A quick side note:/ My day job and general interests greatly influence the path and deicisions I make when setting up infrastructure. What works for me might not work for you, and this is by no means a guide for setting things up. Keep that in mind when I mention the 4th Kubernetes cluster I maintain.
 
