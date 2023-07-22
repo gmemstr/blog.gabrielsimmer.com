@@ -43,6 +43,25 @@ article, .article-list {
   padding: 1ch;
 }
 
+h1 > a, h1 > a:visited {
+  text-decoration: none;
+  color: var(--text-colour);
+}
+
+h1:hover > a {
+  color: #0FA0CE; 
+}
+
+/* Links
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+a {
+  color: #1EAEDB; 
+}
+a:hover {
+  color: #0FA0CE; 
+}
+
+
 /* Base Styles
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 /* NOTE
@@ -101,13 +120,4 @@ h6 { font-size: 1.5rem; line-height: 1.6; }
   h4 { font-size: 3.0rem; }
   h5 { font-size: 2.4rem; }
   h6 { font-size: 1.5rem; }
-}
-
-/* Links
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-a {
-  color: #1EAEDB; 
-}
-a:hover {
-  color: #0FA0CE; 
 }
