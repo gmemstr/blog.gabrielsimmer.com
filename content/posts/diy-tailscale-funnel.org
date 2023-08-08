@@ -1,5 +1,5 @@
 #+title: DIY Tailscale Funnel
-#+date: 08-08-2023
+#+date: 08-08-2023T14:46:00Z
 
 I really do love Tailscale, if it wasn't obvious by [[/posts/infrastructure-megaupdate/][my previous infrastructure update post]]. When they announced their [[https://tailscale.com/kb/1223/tailscale-funnel/][Funnel feature]], I jumped on it as an opportunity to try an alternative to Cloudflare Tunnels. And while it worked pretty well, I was mildly disappointed by some missing features. Key among them being the ability to setup custom DNS entries to point to services. So not only was the URL really long, I also didn't fully have control over it and I also had to do path routing to various services, which can be finicky at the best of times. But I put up with it for a while, because I didn't care /too/ much. At least, that's what I kept telling myself.
 
